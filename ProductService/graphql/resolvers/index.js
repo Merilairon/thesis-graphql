@@ -1,54 +1,51 @@
 const jwt = require("jsonwebtoken");
 const Products = require("../../data/models/product");
+const controller = require("../../controller");
 
 module.exports = {
+  //TODO: catch
   Product: {
     async __resolveReference(object) {
-      return await Products.getOneProduct({ _id: object.id });
+      return await controller.product({ id: object.id });
     },
   },
   Query: {
     async product(_, { id }) {
-      return await Products.getOneProduct({ _id: id });
+      return await controller.product({ id });
     },
     async products() {
-      return await Products.getAllProducts();
+      return await controller.products();
     },
   },
   Mutation: {
     async insertProduct(_, { name, description, pictureUrl, price }) {
       try {
-        let product = await Products.insertProduct({
+        return await controller.insertProduct({
           name,
           description,
           pictureUrl,
           price,
         });
-        return product;
       } catch (e) {
         throw new Error("An error occured during product creation");
       }
     },
     async updateProduct(_, { id, name, description, pictureUrl, price }) {
       try {
-        let product = await Products.updateProduct({
-          _id: id,
+        return await controller.updateProduct({
+          id,
           name,
           description,
           pictureUrl,
           price,
         });
-        return product;
       } catch (e) {
         throw new Error("An error occured during order modification");
       }
     },
     async deleteProduct(_, { id }) {
       try {
-        let product = await Products.deleteProduct({
-          _id: id,
-        });
-        return product;
+        return await controller.deleteProduct({ id });
       } catch (e) {
         throw new Error("An error occured during order creation");
       }

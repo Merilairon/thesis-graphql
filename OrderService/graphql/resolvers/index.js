@@ -1,10 +1,11 @@
 const jwt = require("jsonwebtoken");
-const Orders = require("../../data/models/order");
+const controller = require("../../controller");
 
 module.exports = {
   Order: {
+    //TODO: catch
     async __resolveReference(object) {
-      return await Orders.getOneOrder({ _id: object.id });
+      return await controller.order({ id: id });
     },
     products(order) {
       let productsRepresentation = [];
@@ -20,28 +21,24 @@ module.exports = {
   },
   Account: {
     async orders(account) {
-      return await Orders.getAccountOrders({ account: account.id });
+      return await controller.accountOrders({ account });
     },
   },
   Query: {
-    //TODO: only allow your account
+    //TODO: catch
+    //TODO: only allow your accounts orders
     async order(_, { id }) {
-      return await Orders.getOneOrder({ _id: id });
+      return await controller.order({ id });
     },
     //TODO: only allow admin accounts
     async orders() {
-      return await Orders.getAllOrders();
+      return await controller.orders();
     },
   },
   Mutation: {
     async insertOrder(_, { products }, { user }) {
       try {
-        let order = await Orders.insertOrder({
-          account: user.sub,
-          products,
-          status: false,
-        });
-        return order;
+        return await controller.insertOrder({ products, user });
       } catch (e) {
         throw new Error("An error occured during order creation");
       }
@@ -49,13 +46,7 @@ module.exports = {
     //TODO: only allow yourself or admin to edit
     async updateOrder(_, { id, account, products, status }) {
       try {
-        let order = await Orders.updateProduct({
-          _id: id,
-          account,
-          products,
-          status,
-        });
-        return order;
+        return await controller.updateOrder({ id, account, products, status });
       } catch (e) {
         throw new Error("An error occured during order modification");
       }
@@ -63,11 +54,7 @@ module.exports = {
     //TODO: only allow yourself or admin to remove
     async deleteOrder(_, { id }, { user }) {
       try {
-        let order = await Orders.deleteOrder({
-          _id: id,
-          account: user.sub,
-        });
-        return order;
+        return await controller.deleteOrder(id, user);
       } catch (e) {
         throw new Error("An error occured during order removal");
       }

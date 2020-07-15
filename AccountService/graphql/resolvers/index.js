@@ -1,65 +1,56 @@
 const jwt = require("jsonwebtoken");
-const Users = require("../../data/models/user");
+const controller = require("../../controller");
 
 module.exports = {
   Account: {
     async __resolveReference(object) {
-      return await Users.getOneUser({ _id: object.id });
+      return await controller.account({ id: object.id });
     },
   },
   Query: {
+    //TODO: catch
     async account(_, { id }) {
-      return await Users.getOneUser({ _id: id });
+      return await controller.account({ id });
     },
     async accounts() {
-      return await Users.getAllUsers();
+      return await controller.accounts();
     },
     async currentAccount(_, {}, { user }) {
-      return await Users.getOneUser({ _id: user.sub });
+      return await controller.account({ id: user.sub });
     },
   },
   Mutation: {
-    //TODO: Rewrite
     async login(_, { username, password }) {
-      const user = await Users.login({ username, password });
-      return user.token;
+      try {
+        return await controller.login({ username, password });
+      } catch (e) {
+        throw new Error(
+          "An error occured during user authentication, check username & password"
+        );
+      }
     },
     async register(_, { username, email, password }) {
       try {
-        let user = await Users.insertUser({ username, email, password });
-        return user.token;
+        return await controller.register({ username, email, password });
       } catch (e) {
         throw new Error("An error occured during user creation");
       }
     },
     async updateAccount(_, { username, email, password }, { user }) {
       try {
-        let u = await Users.updateUser({
-          _id: user.sub,
+        return await controller.updateAccount({
           username,
           email,
           password,
+          user,
         });
-        return {
-          id: u._id,
-          username: u.username,
-          email: u.email,
-        };
       } catch (e) {
         throw new Error("An error occured during user modification");
       }
     },
     async deleteAccount(_, {}, { user }) {
       try {
-        let u = await Users.removeUser({
-          _id: user.sub,
-        });
-        //TODO: Move this to a different method
-        return {
-          id: u._id,
-          username: u.username,
-          email: u.email,
-        };
+        return await controller.deleteAccount({ user });
       } catch (e) {
         throw new Error("An error occured during user removal");
       }

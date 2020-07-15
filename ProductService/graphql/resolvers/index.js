@@ -26,7 +26,7 @@ module.exports = {
         });
         return product;
       } catch (e) {
-        //TODO: Error handling
+        throw new Error("An error occured during product creation");
       }
     },
     async updateProduct(_, { id, name, description, pictureUrl, price }) {
@@ -40,7 +40,7 @@ module.exports = {
         });
         return product;
       } catch (e) {
-        //TODO: Error handling
+        throw new Error("An error occured during order modification");
       }
     },
     async deleteProduct(_, { id }) {
@@ -50,7 +50,7 @@ module.exports = {
         });
         return product;
       } catch (e) {
-        //TODO: Error handling
+        throw new Error("An error occured during order creation");
       }
     },
   },

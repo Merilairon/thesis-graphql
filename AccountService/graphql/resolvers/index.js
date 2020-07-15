@@ -29,7 +29,7 @@ module.exports = {
         let user = await Users.insertUser({ username, email, password });
         return user.token;
       } catch (e) {
-        //TODO: Error handling
+        throw new Error("An error occured during user creation");
       }
     },
     async updateAccount(_, { username, email, password }, { user }) {
@@ -46,7 +46,7 @@ module.exports = {
           email: u.email,
         };
       } catch (e) {
-        //TODO: Error handling
+        throw new Error("An error occured during user modification");
       }
     },
     async deleteAccount(_, {}, { user }) {
@@ -54,14 +54,14 @@ module.exports = {
         let u = await Users.removeUser({
           _id: user.sub,
         });
-        //TODO: Change this to a different method
+        //TODO: Move this to a different method
         return {
           id: u._id,
           username: u.username,
           email: u.email,
         };
       } catch (e) {
-        //TODO: Error handling
+        throw new Error("An error occured during user removal");
       }
     },
   },

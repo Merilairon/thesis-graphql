@@ -9,7 +9,7 @@ const app = express();
 
 app.use(
   expressJwt({
-    secret: process.env.JWT_SECRET, //TODO: move to env file
+    secret: process.env.JWT_SECRET,
     algorithms: ["HS256"],
     credentialsRequired: false,
   })

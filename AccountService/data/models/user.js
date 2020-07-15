@@ -43,11 +43,16 @@ class User extends Model {
   }
 
   static async login(input) {
-    //TODO: throw error if user not found
-    let user = await this.findOne({ username: input.username });
-    return user.validatePassword(input.password)
-      ? { ...user.toJSON(), token: user.generateJWT() }
-      : null;
+    try {
+      let user = await this.findOne({ username: input.username });
+      return user.validatePassword(input.password)
+        ? { ...user.toJSON(), token: user.generateJWT() }
+        : null;
+    } catch (e) {
+      throw new Error(
+        "An error occured during login, check username and password"
+      );
+    }
   }
 
   setPassword(password) {

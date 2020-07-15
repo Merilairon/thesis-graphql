@@ -28,7 +28,7 @@ module.exports = {
     async order(_, { id }) {
       return await Orders.getOneOrder({ _id: id });
     },
-    //TODO: only allow admin account
+    //TODO: only allow admin accounts
     async orders() {
       return await Orders.getAllOrders();
     },
@@ -43,9 +43,10 @@ module.exports = {
         });
         return order;
       } catch (e) {
-        //TODO: Error handling
+        throw new Error("An error occured during order creation");
       }
     },
+    //TODO: only allow yourself or admin to edit
     async updateOrder(_, { id, account, products, status }) {
       try {
         let order = await Orders.updateProduct({
@@ -56,9 +57,10 @@ module.exports = {
         });
         return order;
       } catch (e) {
-        //TODO: Error handling
+        throw new Error("An error occured during order modification");
       }
     },
+    //TODO: only allow yourself or admin to remove
     async deleteOrder(_, { id }, { user }) {
       try {
         let order = await Orders.deleteOrder({
@@ -67,7 +69,7 @@ module.exports = {
         });
         return order;
       } catch (e) {
-        //TODO: Error handling
+        throw new Error("An error occured during order removal");
       }
     },
   },

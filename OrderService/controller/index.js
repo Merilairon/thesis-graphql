@@ -1,3 +1,5 @@
+const Orders = require("../data/models/order");
+
 module.exports = {
   order: async ({ id }) => {
     return await Orders.getOneOrder({ _id: id });

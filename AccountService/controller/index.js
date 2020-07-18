@@ -28,7 +28,7 @@ module.exports = {
       email: u.email,
     };
   },
-  deleteAccount: async () => {
+  deleteAccount: async ({ user }) => {
     let u = await Users.removeUser({
       _id: user.sub,
     });

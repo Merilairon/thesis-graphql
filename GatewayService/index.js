@@ -2,6 +2,7 @@ require("dotenv").config();
 const { ApolloGateway, RemoteGraphQLDataSource } = require("@apollo/gateway");
 const { ApolloServer } = require("apollo-server-express");
 const express = require("express");
+const helmet = require("helmet");
 const expressJwt = require("express-jwt");
 
 const port = 4000;
@@ -14,7 +15,9 @@ app.use(
     credentialsRequired: false,
   })
 );
+app.use(helmet());
 
+//TODO: seperate file?
 const gateway = new ApolloGateway({
   serviceList: [
     {

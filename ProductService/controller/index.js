@@ -1,3 +1,5 @@
+const Products = require("../data/models/product");
+
 module.exports = {
   product: async ({ id }) => {
     return await Products.getOneProduct({ _id: id });

@@ -1,20 +1,30 @@
 const jwt = require("jsonwebtoken");
-const Products = require("../../data/models/product");
 const controller = require("../../controller");
 
 module.exports = {
-  //TODO: catch
   Product: {
     async __resolveReference(object) {
-      return await controller.product({ id: object.id });
+      try {
+        return await controller.product({ id: object.id });
+      } catch (e) {
+        throw new Error("An error occured during product retrieval");
+      }
     },
   },
   Query: {
     async product(_, { id }) {
-      return await controller.product({ id });
+      try {
+        return await controller.product({ id });
+      } catch (e) {
+        throw new Error("An error occured during product retrieval");
+      }
     },
     async products() {
-      return await controller.products();
+      try {
+        return await controller.products();
+      } catch (e) {
+        throw new Error("An error occured during product retrieval");
+      }
     },
   },
   Mutation: {

@@ -6,10 +6,9 @@ const mongooseHidden = require("mongoose-hidden")({
 const crypto = require("crypto");
 const jwt = require("jsonwebtoken");
 
-//TODO: add roles
-
 const userSchema = new Schema({
   username: String,
+  roles: { type: [String], default: [] },
   email: String,
   hash: String,
   salt: String,
@@ -23,7 +22,6 @@ class User extends Model {
     return await this.findOne({ _id: input._id });
   }
   static async insertUser(input) {
-    console.log(input);
     let user = this(input);
     user.setPassword(input.password);
     return user.save().then(() => user);
@@ -33,6 +31,7 @@ class User extends Model {
     user.username = input.username;
     user.email = input.email;
     user.setPassword(input.password);
+    user.roles = input.roles;
     return user.save().then(() => {
       return { ...user.toJSON(), token: user.generateJWT() };
     });
@@ -43,16 +42,10 @@ class User extends Model {
   }
 
   static async login(input) {
-    try {
-      let user = await this.findOne({ username: input.username });
-      return user.validatePassword(input.password)
-        ? { ...user.toJSON(), token: user.generateJWT() }
-        : null;
-    } catch (e) {
-      throw new Error(
-        "An error occured during login, check username and password"
-      );
-    }
+    let user = await this.findOne({ username: input.username });
+    return user.validatePassword(input.password)
+      ? { ...user.toJSON(), token: user.generateJWT() }
+      : null;
   }
 
   setPassword(password) {
@@ -77,6 +70,7 @@ class User extends Model {
     return jwt.sign(
       {
         username: this.username,
+        roles: this.roles,
       },
       process.env.JWT_SECRET,
       {

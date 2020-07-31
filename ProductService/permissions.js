@@ -1,15 +1,22 @@
-const { rule, shield } = require("graphql-shield");
+const { rule, shield, and } = require("graphql-shield");
 
-const isAuthenticated = rule()((parent, args, { user }) => {
-  return user !== null;
-});
+const isAuthenticated = rule({ cache: "contextual" })(
+  (parent, args, { user }) => {
+    return user !== null;
+  }
+);
+
+const isAuthorizedAsAdmin = rule({ cache: "contextual" })(
+  (parent, args, { user }) => {
+    return user !== null && user.roles.includes("admin");
+  }
+);
 
 const permissions = shield({
-  //TODO: change to only admin
   Mutation: {
-    insertProduct: isAuthenticated,
-    updateProduct: isAuthenticated,
-    deleteProduct: isAuthenticated,
+    insertProduct: and(isAuthenticated, isAuthorizedAsAdmin),
+    updateProduct: and(isAuthenticated, isAuthorizedAsAdmin),
+    deleteProduct: and(isAuthenticated, isAuthorizedAsAdmin),
   },
 });
 

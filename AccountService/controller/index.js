@@ -15,17 +15,19 @@ module.exports = {
     let user = await Users.insertUser({ username, email, password });
     return user.token;
   },
-  updateAccount: async ({ username, email, password, user }) => {
+  updateAccount: async ({ username, email, password, roles, user }) => {
     let u = await Users.updateUser({
       _id: user.sub,
       username,
       email,
       password,
+      roles,
     });
     return {
       id: u._id,
       username: u.username,
       email: u.email,
+      roles: u.roles,
     };
   },
   deleteAccount: async ({ user }) => {
@@ -36,6 +38,7 @@ module.exports = {
       id: u._id,
       username: u.username,
       email: u.email,
+      roles: u.roles,
     };
   },
 };

@@ -3,36 +3,61 @@ const controller = require("../../controller");
 
 module.exports = {
   Order: {
-    //TODO: catch
     async __resolveReference(object) {
-      return await controller.order({ id: id });
+      try {
+        return await controller.order({ id: id });
+      } catch (e) {
+        throw new Error("An error occured during order retrieval");
+      }
     },
     products(order) {
-      let productsRepresentation = [];
-
-      order.products.forEach((product) => {
-        productsRepresentation.push({
-          __typename: "Product",
-          id: product,
+      try {
+        let productsRepresentation = [];
+        order.products.forEach((product) => {
+          productsRepresentation.push({
+            __typename: "Product",
+            id: product,
+          });
         });
-      });
-      return productsRepresentation;
+        return productsRepresentation;
+      } catch (e) {
+        throw new Error("An error occured during order retrieval");
+      }
+    },
+    account(order) {
+      try {
+        return {
+          __typename: "Account",
+          id: order.account,
+        };
+      } catch (e) {
+        throw new Error("An error occured during order retrieval");
+      }
     },
   },
   Account: {
     async orders(account) {
-      return await controller.accountOrders({ account });
+      try {
+        return await controller.accountOrders({ account });
+      } catch (e) {
+        throw new Error("An error occured during order retrieval");
+      }
     },
   },
   Query: {
-    //TODO: catch
-    //TODO: only allow your accounts orders
     async order(_, { id }) {
-      return await controller.order({ id });
+      try {
+        return await controller.order({ id });
+      } catch (e) {
+        throw new Error("An error occured during order retrieval");
+      }
     },
-    //TODO: only allow admin accounts
     async orders() {
-      return await controller.orders();
+      try {
+        return await controller.orders();
+      } catch (e) {
+        throw new Error("An error occured during order retrieval");
+      }
     },
   },
   Mutation: {
@@ -43,7 +68,6 @@ module.exports = {
         throw new Error("An error occured during order creation");
       }
     },
-    //TODO: only allow yourself or admin to edit
     async updateOrder(_, { id, account, products, status }) {
       try {
         return await controller.updateOrder({ id, account, products, status });
@@ -51,7 +75,6 @@ module.exports = {
         throw new Error("An error occured during order modification");
       }
     },
-    //TODO: only allow yourself or admin to remove
     async deleteOrder(_, { id }, { user }) {
       try {
         return await controller.deleteOrder(id, user);

@@ -8,15 +8,26 @@ module.exports = {
     },
   },
   Query: {
-    //TODO: catch
     async account(_, { id }) {
-      return await controller.account({ id });
+      try {
+        return await controller.account({ id });
+      } catch (e) {
+        throw new Error("An error occured during user retrieval");
+      }
     },
     async accounts() {
-      return await controller.accounts();
+      try {
+        return await controller.accounts();
+      } catch (e) {
+        throw new Error("An error occured during user retrieval");
+      }
     },
     async currentAccount(_, {}, { user }) {
-      return await controller.account({ id: user.sub });
+      try {
+        return await controller.account({ id: user.sub });
+      } catch (e) {
+        throw new Error("An error occured during user retrieval");
+      }
     },
   },
   Mutation: {
@@ -36,12 +47,14 @@ module.exports = {
         throw new Error("An error occured during user creation");
       }
     },
-    async updateAccount(_, { username, email, password }, { user }) {
+    //TODO: only allow admin or own account, if roles are provided only allow admin
+    async updateAccount(_, { username, email, password, roles }, { user }) {
       try {
         return await controller.updateAccount({
           username,
           email,
           password,
+          roles,
           user,
         });
       } catch (e) {

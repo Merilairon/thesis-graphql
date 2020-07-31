@@ -3,9 +3,9 @@ const { gql } = require("apollo-server");
 const typeDefs = gql`
   type Order @key(fields: "id") {
     id: ID!
-    account: Account
-    products: [Product]
-    status: Boolean
+    account: Account!
+    products: [Product]!
+    status: Boolean!
   }
   extend type Account @key(fields: "id") {
     id: ID! @external
@@ -19,7 +19,7 @@ const typeDefs = gql`
     orders: [Order]
   }
   extend type Mutation {
-    insertOrder(products: [ID]): Order
+    insertOrder(products: [ID]!): Order
     updateOrder(id: ID!, account: ID, products: [ID], status: Boolean): Order
     deleteOrder(id: ID!): Order
   }

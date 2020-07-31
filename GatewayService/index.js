@@ -17,7 +17,6 @@ app.use(
 );
 app.use(helmet());
 
-//TODO: seperate file?
 const gateway = new ApolloGateway({
   serviceList: [
     {

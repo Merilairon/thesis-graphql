@@ -1,8 +1,14 @@
-const { rule, shield } = require("graphql-shield");
+const { rule, shield, and } = require("graphql-shield");
 const Users = require("./data/models/user");
 
 const isAuthenticated = rule()((parent, args, { user }) => {
   return user !== null;
+});
+
+const isOwnAccountOrAdmin = rule()((parent, { id, roles }, { user }) => {
+  if (roles == null || roles.length !== 0)
+    return user !== null && (user.roles.includes("admin") || user.sub == id);
+  return user !== null && user.roles.includes("admin");
 });
 
 const permissions = shield({
@@ -12,7 +18,7 @@ const permissions = shield({
     currentAccount: isAuthenticated,
   },
   Mutation: {
-    updateAccount: isAuthenticated, //TODO: add only admin can do roles
+    updateAccount: and(isAuthenticated, isOwnAccountOrAdmin),
     deleteAccount: isAuthenticated,
   },
 });

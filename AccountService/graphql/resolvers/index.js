@@ -47,15 +47,15 @@ module.exports = {
         throw new Error("An error occured during user creation");
       }
     },
-    //TODO: only allow admin or own account, if roles are provided only allow admin
-    async updateAccount(_, { username, email, password, roles }, { user }) {
+    //TODO: Test: only allow admin or own account, if roles are provided only allow admin
+    async updateAccount(_, { id, username, email, password, roles }, { user }) {
       try {
         return await controller.updateAccount({
+          id,
           username,
           email,
           password,
           roles,
-          user,
         });
       } catch (e) {
         throw new Error("An error occured during user modification");

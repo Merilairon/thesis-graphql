@@ -15,9 +15,9 @@ module.exports = {
     let user = await Users.insertUser({ username, email, password });
     return user.token;
   },
-  updateAccount: async ({ username, email, password, roles, user }) => {
+  updateAccount: async ({ id, username, email, password, roles }) => {
     let u = await Users.updateUser({
-      _id: user.sub,
+      _id: id,
       username,
       email,
       password,

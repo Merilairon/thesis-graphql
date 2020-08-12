@@ -1,4 +1,3 @@
-const jwt = require("jsonwebtoken");
 const controller = require("../../controller");
 
 module.exports = {

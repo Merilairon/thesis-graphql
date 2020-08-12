@@ -6,8 +6,6 @@ const isAuthenticated = rule()((parent, args, { user }) => {
 });
 
 const isOwnAccountOrAdmin = rule()((parent, { id, roles }, { user }) => {
-  const { roles } = req.body,
-    user = req.user;
   return user !== null && (user.sub == id || user.roles.includes("admin"));
 });
 

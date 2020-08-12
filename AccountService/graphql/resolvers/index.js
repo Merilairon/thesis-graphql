@@ -1,4 +1,3 @@
-const jwt = require("jsonwebtoken");
 const controller = require("../../controller");
 
 module.exports = {
@@ -47,7 +46,6 @@ module.exports = {
         throw new Error("An error occured during user creation");
       }
     },
-    //TODO: Test: only allow admin or own account, if roles are provided only allow admin
     async updateAccount(_, { id, username, email, password, roles }, { user }) {
       try {
         return await controller.updateAccount({

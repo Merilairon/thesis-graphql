@@ -63,8 +63,9 @@ module.exports = {
   Mutation: {
     async insertOrder(_, { products }, { user }) {
       try {
-        return await controller.insertOrder({ products, user });
+        return await controller.insertOrder({ products, account: user.sub });
       } catch (e) {
+        console.log(e);
         throw new Error("An error occured during order creation");
       }
     },

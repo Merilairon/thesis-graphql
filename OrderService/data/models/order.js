@@ -34,22 +34,22 @@ class Order {
   }
 
   static async insertOrder(input) {
-    let product = this(input);
-    return product.save().then(() => product);
+    let order = this(input);
+    return order.save().then(() => order);
   }
 
   static async updateOrder(input) {
-    let product = await this.findOne({ _id: input._id });
-    product.account = input.account;
-    product.products = input.products;
-    product.status = input.status;
-    product.save();
-    return product;
+    let order = await this.findOne({ _id: input._id });
+    order.account = input.account;
+    order.products = input.products;
+    order.status = input.status;
+    order.save();
+    return order;
   }
 
   static async deleteOrder(input) {
-    let product = await this.findOne({ _id: input._id, account: input.sub });
-    return this.deleteOne({ _id: input._id }).then(() => product);
+    let order = await this.findOne({ _id: input._id, account: input.sub });
+    return this.deleteOne({ _id: input._id }).then(() => order);
   }
 }
 

@@ -23,6 +23,12 @@ const server = new ApolloServer({
     const user = req.headers.user ? JSON.parse(req.headers.user) : null;
     return { user };
   },
+  formatError: (err) => {
+    delete err.extensions["exception"];
+    // Otherwise return the original error.  The error can also
+    // be manipulated in other ways, so long as it's returned.
+    return err;
+  },
 });
 
 server.listen({ port }).then(({ url }) => {

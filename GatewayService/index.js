@@ -2,7 +2,6 @@ require("dotenv").config();
 const { ApolloGateway, RemoteGraphQLDataSource } = require("@apollo/gateway");
 const { ApolloServer } = require("apollo-server-express");
 const express = require("express");
-const helmet = require("helmet");
 const expressJwt = require("express-jwt");
 
 const port = 4000;
@@ -15,7 +14,6 @@ app.use(
     credentialsRequired: false,
   })
 );
-app.use(helmet());
 
 const gateway = new ApolloGateway({
   serviceList: [
@@ -51,6 +49,12 @@ const server = new ApolloServer({
   context: ({ req }) => {
     const user = req.user || null;
     return { user };
+  },
+  formatError: (err) => {
+    delete err.extensions["exception"];
+    // Otherwise return the original error.  The error can also
+    // be manipulated in other ways, so long as it's returned.
+    return err;
   },
 });
 

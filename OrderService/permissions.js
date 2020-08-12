@@ -24,7 +24,7 @@ const permissions = shield({
     orders: and(isAuthenticated, isAuthorizedAsAdmin),
   },
   Mutation: {
-    insertOrder: and(isAuthenticated, isAuthorizedAsAdmin),
+    insertOrder: isAuthenticated,
     updateOrder: and(isAuthenticated, isAuthorizedAsAdmin),
     deleteOrder: and(isAuthenticated, isAuthorizedAsAdmin),
   },

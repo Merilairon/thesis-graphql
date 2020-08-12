@@ -16,7 +16,7 @@ const typeDefs = gql`
     login(username: String!, password: String!): String
     register(username: String!, email: String!, password: String!): String
     updateAccount(
-      username: String!
+      username: String
       email: String
       password: String
       roles: [String]

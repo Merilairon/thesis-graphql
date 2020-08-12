@@ -1,8 +1,5 @@
 const mongoose = require("mongoose");
-const { Schema } = mongoose;
-const mongooseHidden = require("mongoose-hidden")({
-  defaultHidden: { __v: true, hash: true, salt: true, password: true },
-});
+const { Schema, Model } = mongoose;
 
 let orderSchema = new Schema({
   account: {
@@ -21,7 +18,7 @@ let orderSchema = new Schema({
   },
 });
 
-class Order {
+class Order extends Model {
   static async getAllOrders() {
     return await this.find();
   }
@@ -54,7 +51,6 @@ class Order {
 }
 
 orderSchema.loadClass(Order);
-orderSchema.plugin(mongooseHidden);
 
 let OrderSchema = mongoose.model("Order", orderSchema);
 module.exports = OrderSchema;

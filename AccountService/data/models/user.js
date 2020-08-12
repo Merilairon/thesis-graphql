@@ -1,7 +1,12 @@
 const mongoose = require("mongoose");
 const { Model, Schema } = mongoose;
 const mongooseHidden = require("mongoose-hidden")({
-  defaultHidden: { __v: true, hash: true, salt: true, password: true },
+  defaultHidden: {
+    __v: true,
+    hash: true,
+    salt: true,
+    password: true,
+  },
 });
 const crypto = require("crypto");
 const jwt = require("jsonwebtoken");
@@ -19,7 +24,9 @@ class User extends Model {
     return await this.find();
   }
   static async getOneUser(input) {
-    return await this.findOne({ _id: input._id });
+    return await this.findOne({
+      _id: input._id,
+    });
   }
   static async insertUser(input) {
     let user = this(input);
@@ -27,22 +34,33 @@ class User extends Model {
     return user.save().then(() => user);
   }
   static async updateUser(input) {
-    let user = await this.findOne({ _id: input._id });
+    let user = await this.findOne({
+      _id: input._id,
+    });
     user.username = input.username;
     user.email = input.email;
     user.setPassword(input.password);
     user.roles = input.roles;
     return user.save().then(() => {
-      return { ...user.toJSON(), token: user.generateJWT() };
+      return {
+        ...user.toJSON(),
+        token: user.generateJWT(),
+      };
     });
   }
   static async removeUser(input) {
-    let user = await this.findOne({ _id: input._id });
-    return this.deleteOne({ _id: input._id }).then(() => user);
+    let user = await this.findOne({
+      _id: input._id,
+    });
+    return this.deleteOne({
+      _id: input._id,
+    }).then(() => user);
   }
 
   static async login(input) {
-    let user = await this.findOne({ username: input.username });
+    let user = await this.findOne({
+      username: input.username,
+    });
     return user.validatePassword(input.password)
       ? { ...user.toJSON(), token: user.generateJWT() }
       : null;

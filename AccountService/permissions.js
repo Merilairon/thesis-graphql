@@ -6,9 +6,9 @@ const isAuthenticated = rule()((parent, args, { user }) => {
 });
 
 const isOwnAccountOrAdmin = rule()((parent, { id, roles }, { user }) => {
-  if (roles == null || roles.length !== 0)
-    return user !== null && (user.roles.includes("admin") || user.sub == id);
-  return user !== null && user.roles.includes("admin");
+  const { roles } = req.body,
+    user = req.user;
+  return user !== null && (user.sub == id || user.roles.includes("admin"));
 });
 
 const permissions = shield({

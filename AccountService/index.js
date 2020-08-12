@@ -3,16 +3,14 @@ const { ApolloServer } = require("apollo-server");
 const { applyMiddleware } = require("graphql-middleware");
 const { buildFederatedSchema } = require("@apollo/federation");
 
-const { connectDatabase, initializeModels } = require("./data/database");
-
+const { connectDatabase } = require("./data/database");
 connectDatabase();
-initializeModels();
 
 const typeDefs = require("./graphql/typedefs");
 const resolvers = require("./graphql/resolvers");
 const { permissions } = require("./permissions");
 
-const port = 4001;
+const port = process.env.PORT || 4001;
 
 const server = new ApolloServer({
   schema: applyMiddleware(

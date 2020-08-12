@@ -4,7 +4,7 @@ const { ApolloServer } = require("apollo-server-express");
 const express = require("express");
 const expressJwt = require("express-jwt");
 
-const port = 4000;
+const port = process.env.PORT || 4000;
 const app = express();
 
 app.use(

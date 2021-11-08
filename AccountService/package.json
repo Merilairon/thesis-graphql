@@ -12,7 +12,7 @@
   "license": "MIT",
   "dependencies": {
     "@apollo/federation": "^0.16.2",
-    "apollo-server": ">=2.14.2",
+    "apollo-server": ">=2.25.3",
     "dotenv": "^8.2.0",
     "graphql": "^15.0.0",
     "graphql-middleware": "^4.0.2",
